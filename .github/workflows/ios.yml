@@ -1,0 +1,17 @@
+name: iOS validation
+on:
+  push:
+  pull_request:
+jobs:
+  validate:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test conversion and rate decoding
+        run: swift test
+      - name: Build iOS 16+ app for Simulator
+        run: >-
+          xcodebuild -project AIOConverter.xcodeproj -scheme AIOConverter
+          -configuration Debug -sdk iphonesimulator
+          -destination 'generic/platform=iOS Simulator'
+          CODE_SIGNING_ALLOWED=NO build
